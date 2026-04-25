@@ -1,0 +1,10 @@
+file(REMOVE_RECURSE
+  "/home/d/catkin_ws/devel/lib/bysj_pkg/base_controller_exp2"
+  "/home/d/catkin_ws/devel/lib/bysj_pkg/base_controller_exp2.pdb"
+  "CMakeFiles/base_controller_exp2.dir/src/base_controller_exp2.cpp.o"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/base_controller_exp2.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

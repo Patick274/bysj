@@ -1,0 +1,41 @@
+<launch>
+    <!--清除雷达残留数据-->
+    <node  pkg="rosbash" type="rosrun"  name="clearing_cache"       args="rosclean purge -y" />
+    <!--加载机器人模型-->
+    <param name="robot_description"     textfile="$(find bysj_pkg)/urdf/rosrobot_sim.urdf" />
+    <node  name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node  name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <!--雷达数据-->
+    <include file = "$(find bysj_pkg)/launch/lidar_X2.launch" />
+
+    <!--通讯与数据转换-->
+    <node 
+          name="base_controller_exp2" 
+          pkg="bysj_pkg" 
+          type="base_controller_exp2" output="screen">
+          <param name="port"          value="/dev/ttyUSB0" /> 
+          <param name="baudrate"      value="115200" /> 
+          <param name="use_imu"       value="true" />
+          <param name="use_odom"      value="false" /> 
+    </node>
+
+    <!--建图算法+imu-->
+    <node 
+           name="cartographer_node" 
+           pkg="cartographer_ros" 
+           type="cartographer_node" 
+           args="-configuration_directory $(find bysj_pkg)/config -configuration_basename cartographer.lua" 
+           output="screen">
+    <remap from="imu" to="/imu/data" />
+    </node>
+    
+     <!--map的topic发布-->
+    <node name="cartographer_occupancy_grid_node"
+          pkg="cartographer_ros"
+          type="cartographer_occupancy_grid_node"
+          args="-resolution 0.05" />
+
+    <!--启动rviz-->
+    <node name="rviz" pkg="rviz" type="rviz"  required="true" />
+</launch>

@@ -1,0 +1,43 @@
+<launch>
+    <!--加载机器人模型-->
+    <param name="robot_description" textfile="$(find bysj_pkg)/urdf/rosrobot_sim.urdf" />
+    <node  name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <!--X2雷达启动-->
+    <include file="$(find bysj_pkg)/launch/lidar_X2.launch" />
+    <!--底盘节点启动-->
+    <node      name="base_controller" pkg="bysj_pkg" type="base_controller_exp3" output="screen">
+        <param name="port" value="/dev/ttyUSB0" />
+        <param name="baudrate" value="115200" />
+    </node>
+    <!--加载地图-->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find bysj_pkg)/maps/my_map.yaml" />
+    <!--amcl定位-->
+    <node pkg="amcl" type="amcl" name="amcl" output="screen">
+        <param name="use_map_topic" value="true"/>
+        <param name="odom_model_type" value="omni"/>
+        <param name="odom_frame_id" value="odom"/>
+        <param name="base_frame_id" value="base_link"/>
+        <param name="global_frame_id" value="map"/>
+    </node>
+    <!--导航规划-->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+        <rosparam file="$(find bysj_pkg)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find bysj_pkg)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find bysj_pkg)/param/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find bysj_pkg)/param/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find bysj_pkg)/param/dwa_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find bysj_pkg)/param/recovery_params.yaml" command="load" />
+    </node>
+
+    <!--雷达噪点清除-->
+    <node name="jie_ware" pkg="lidar_filter_node" type="lidar_filter_node" />
+
+    <!--rivz可视化-->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find bysj_pkg)/rviz/navigation.rviz" />
+
+    <!--costmap cleaner-->
+
+    <!--去除代价地图残留-->
+    <node name="jie_ware" pkg="costmap_cleaner" type="cost_map_cleaner" />
+</launch>

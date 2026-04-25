@@ -1,0 +1,8 @@
+prefix=/home/d/catkin_ws/devel
+
+Name: bysj_pkg
+Description: Description of bysj_pkg
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp sensor_msgs serial tf2 tf2_geometry_msgs
