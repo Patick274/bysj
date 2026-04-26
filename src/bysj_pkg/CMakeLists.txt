@@ -223,3 +223,9 @@ target_link_libraries(base_controller_exp3 ${catkin_LIBRARIES})
 # 导航实验
 add_executable(base_controller_nav src/base_controller_nav.cpp)
 target_link_libraries(base_controller_nav ${catkin_LIBRARIES})
+
+## 安装脚本目录
+install(PROGRAMS
+  scripts/reset_lidar.sh
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

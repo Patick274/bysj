@@ -1,0 +1,22 @@
+DWAPlannerROS:
+  # 速度限制
+  max_vel_x: 0.45
+  min_vel_x: -0.45
+  max_vel_y: 0.3  # 麦轮专属：Y轴平移速度
+  min_vel_y: -0.3 
+  max_vel_trans: 0.5
+  min_vel_trans: 0.1
+  max_vel_theta: 1.0
+  min_vel_theta: 0.4
+
+  # 加速度限制
+  acc_lim_x: 2.5
+  acc_lim_y: 2.5
+  acc_lim_theta: 3.2
+
+  # 麦克纳姆轮必须开启全向移动
+  holonomic_robot: true
+  
+  # 容忍度
+  yaw_goal_tolerance: 0.1
+  xy_goal_tolerance: 0.1
