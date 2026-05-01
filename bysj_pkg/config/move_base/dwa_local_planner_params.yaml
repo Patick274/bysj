@@ -1,0 +1,25 @@
+DWAPlannerROS:
+  # 1. 麦克纳姆轮速度限制 (重点：放开 Y 轴速度)
+  max_vel_x: 0.5
+  min_vel_x: -0.1
+  max_vel_y: 0.3        # 关键！开启横向平移能力
+  min_vel_y: -0.3       # 关键！开启横向平移能力
+  max_vel_trans: 0.6    # 最大绝对平移速度
+  min_vel_trans: 0.1
+  max_vel_theta: 1.0    # 原地自转最大角速度
+  min_vel_theta: 0.2
+
+  # 2. 预测与采样窗口 (对应论文中的三维采样空间)
+  sim_time: 1.7         # 预测未来轨迹的时间
+  vx_samples: 10        # X轴速度采样点数
+  vy_samples: 10        # Y轴速度采样点数 (差速车这里通常是0，你必须大于0)
+  vtheta_samples: 20    # 旋转角速度采样点数
+
+  # 3. 轨迹评价函数打分权重 (对应论文4.3.3节)
+  path_distance_bias: 32.0   # 贴合全局路径的权重
+  goal_distance_bias: 24.0   # 趋向目标点的权重
+  occdist_scale: 0.02        # 避障权重 (防止碰到代价地图的致命区)
+  
+  # 4. 容差范围
+  xy_goal_tolerance: 0.15
+  yaw_goal_tolerance: 0.1

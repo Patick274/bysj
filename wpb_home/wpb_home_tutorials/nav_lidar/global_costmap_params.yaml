@@ -1,0 +1,42 @@
+global_costmap:
+  global_frame: map   
+  robot_base_frame: base_footprint
+  static_map: true          # 是否从 ROS 的/map话题加载预先生成的静态地图（如 SLAM 构建的地图）。
+  update_frequency: 1.0     # 代价地图的更新频率（单位：Hz）
+  publish_frequency: 1.0    # 代价地图的发布频率（单位：Hz）
+  transform_tolerance: 1.0  # 允许坐标系变换（如map→base_footprint）的最大延迟 / 误差
+
+#恢复行为
+# name:  '命名名称'
+# type:  '类型三选一'
+#        'clear_costmap_recovery/ClearCostmapRecovery'
+#        'rotate_recovery/RotateRecovery'
+#        'move_slow_and_clear/MoveSlowAndClear'（不常用）
+#            (命名空间)/（命名名称）
+r ecovery_behaviors: 
+  - name: 'rotate_recovery'
+    type: 'rotate_recovery/RotateRecovery'
+
+  - name: 'reset_recovery'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+reset_recovery:
+    reset_distance: 1.84
+    layer_names: ["obstacle_layer"]
+
+ # - name: 'conservative_reset' #（保守式代价地图重置）
+ #   type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+ # - name: 'rotate_recovery' # （旋转恢复）
+ #   type: 'rotate_recovery/RotateRecovery'
+
+ # - name: 'aggressive_reset' # （激进式代价地图重置）
+ #   type: 'clear_costmap_recovery/ClearCostmapRecovery'
+
+#conservative_reset: #保守
+#  reset_distance: 2.0  # 清除的范围
+#  layer_names: ["obstacle_layer"] # 清除的地图图层  障碍层
+
+#aggressive_reset: # 激进
+#  reset_distance: 0.0 
+#  layer_names: ["obstacle_layer"]

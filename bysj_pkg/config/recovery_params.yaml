@@ -1,0 +1,32 @@
+# ==========================================
+# 导航恢复行为 (Recovery Behaviors) 策略序列
+# ==========================================
+recovery_behavior_enabled: true
+clearing_rotation_allowed: true
+recovery_behaviors:
+  - name: 'conservative_reset'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'rotate_recovery'
+    type: 'rotate_recovery/RotateRecovery'
+  - name: 'aggressive_reset'
+    type: 'clear_costmap_recovery/ClearCostmapRecovery'
+  - name: 'rotate_recovery'
+    type: 'rotate_recovery/RotateRecovery'
+
+# 1. 保守清除策略 (Conservative Reset)
+conservative_reset:
+  reset_distance: 3.0
+  layer_names: ["obstacle_layer"]
+
+# 2. 原地旋转策略 (Rotate Recovery)
+rotate_recovery:
+  max_rotational_vel: 1.0
+  min_in_place_rotational_vel: 0.4
+  yaw_goal_tolerance: 0.1
+  acc_lim_th: 3.2
+  frequency: 20.0
+  
+# 3. 激进清除策略 (Aggressive Reset)
+aggressive_reset:
+  reset_distance: 0.5
+  layer_names: ["obstacle_layer"]

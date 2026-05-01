@@ -1,0 +1,33 @@
+<launch>
+    <!-- 清除雷达残留数据 -->
+    <node pkg="bysj_pkg" type="reset_lidar.sh" name="reset_lidar" 
+          args="/dev/lidar" output="screen" />
+    <!--加载机器人模型-->
+    <param name="robot_description"     textfile="$(find bysj_pkg)/urdf/rosrobot_sim.urdf" />
+    <node  name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node  name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <!--雷达数据-->
+    <include file="$(find bysj_pkg)/launch/lidar_X2.launch" />
+
+    <!--雷达噪点清除-->
+    <node name="jlidar_filter_node" pkg="jie_ware" type="lidar_filter_node" />
+
+    <!--建图算法-->
+    <node 
+          name="cartographer_node" 
+          pkg= "cartographer_ros" 
+          type="cartographer_node" 
+          args="-configuration_directory $(find bysj_pkg)/config -configuration_basename cartographer.lua" 
+          output="screen">
+    </node>
+
+    <!--map的topic发布-->
+    <node name="cartographer_occupancy_grid_node"
+          pkg="cartographer_ros"
+          type="cartographer_occupancy_grid_node"
+          args="-resolution 0.05" />
+    
+    <!--启动rviz-->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find bysj_pkg)/rviz/1mapping.rviz" required="true" />
+</launch>

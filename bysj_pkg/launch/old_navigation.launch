@@ -1,0 +1,49 @@
+<launch>
+  <!-- 启动move_base节点：ROS导航栈的核心，负责全局和局部路径规划 -->
+  <node 
+        pkg="move_base" type="move_base" name="move_base">
+        <!-- 加载全局代价地图的通用参数 -->
+        <rosparam file="$(find wpb_home_tutorials)/nav_lidar/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <!-- 加载局部代价地图的通用参数（与全局共用同一套基础配置） -->
+        <rosparam file="$(find wpb_home_tutorials)/nav_lidar/costmap_common_params.yaml" command="load" ns="local_costmap" /> 
+        <!-- 加载全局代价地图的专属参数 -->
+        <rosparam file="$(find wpb_home_tutorials)/nav_lidar/global_costmap_params.yaml" command="load" />
+        <!-- 加载局部代价地图的专属参数 -->
+        <rosparam file="$(find wpb_home_tutorials)/nav_lidar/local_costmap_params.yaml" command="load" />
+        <!-- 设置全局路径规划器为GlobalPlanner（经典的Dijkstra/A*算法实现） -->
+        <param name="base_global_planner" value="global_planner/GlobalPlanner" /> 
+        <param name="base_local_planner"  value="wpbh_local_planner/WpbhLocalPlanner" /> 
+        <param name="controller" value="10" type="double" /> 
+        
+        <!-- 设置局部路径规划器为WpbhLocalPlanner（适配WPB Home机器人的自定义规划器） -->
+        <!-- <param name="base_local_planner" value="wpbh_local_planner/WpbhLocalPlanner" /> -->
+
+        <!--  局部规划器  DWA  -->
+        <!-- <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" /> -->
+        <!-- <rosparam file="$(find wpb_home_tutorials)/nav_lidar/dwa_local_planner_params.yaml"  command="load" /> -->
+
+        <!--  局部规划器  TEB  -->
+        <!-- <param name= "base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />-->
+        <!-- <rosparam file="$(find wpb_home_tutorials)/nav_lidar/teb_local_planner_params.yaml"  command="load" /> -->
+  </node>
+  
+  <!-- 启动地图服务节点：用于加载和发布已构建的地图 -->
+  <node pkg="map_server" type="map_server" name="map_server" args="/home/d/map.yaml"/>
+
+  <!-- 启动AMCL节点：自适应蒙特卡洛定位，用于机器人在地图中的定位 -->
+  <node pkg="amcl" type="amcl" name="amcl"/>
+
+  <node pkg="rviz" type="rviz" name="rviz"  args="-d $(find nav_pkg)/rviz/map_tool.rviz" /> 
+
+  <!--DWA rviz 参数设置-->
+  <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find nav_pkg)/rviz/nav_DWA.rviz" />  --> 
+
+  <!--TEB rviz 参数设置-->
+  <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find nav_pkg)/rviz/nav_TEB.rviz" />  -->
+
+  <node pkg="waterplus_map_tools" type="wp_navi_server" name="wp_navi_server" output="screen" />
+
+  <node pkg="waterplus_map_tools" type="wp_manager"     name="wp_manager"     output="screen" />
+
+
+</launch>

@@ -1,0 +1,10 @@
+local_costmap:
+  global_frame: odom
+  robot_base_frame: base_footprint
+  static_map: false   # 局部代价地图是否从/map话题加载静态地图。
+  rolling_window: true # 是否启用滚动窗口模式 , 局部代价地图是否以机器人为中心 “滚动更新”。
+  width: 3.0  # 局部代价地图的宽度（单位：米）
+  height: 3.0 # 局部代价地图的高度（单位：米）
+  update_frequency: 10.0  # 局部代价地图更新频率（单位：Hz）
+  publish_frequency: 10.0 # 局部代价地图发布频率（单位：Hz）
+  transform_tolerance: 1.0 # 坐标变换容忍时间（单位：秒）

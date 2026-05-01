@@ -1,0 +1,17 @@
+<launch>
+
+  <!-- 1. 包含并启动WPB机器人的RoboCup仿真场景（基础环境+机器人模型） -->
+  <include file="$(find wpr_simulation)/launch/wpb_stage_robocup.launch"/>
+
+  <!-- 2. 启动gmapping SLAM节点：核心建图算法，接收激光数据生成栅格地图 -->
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping"/>
+
+  <!-- 3. 启动RVIZ可视化工具：加载指定的rviz配置文件，用于实时查看建图效果 -->
+  <node pkg="rviz" type="rviz" name="rviz"  args="-d $(find slam_pkg)/rviz/gmapping.rviz"/>
+             <!--args="-d $(find slam_pkg)/rviz/gmapping.rviz  
+            启动 RVIZ 节点时的参数配置，核心作用是指定 RVIZ 启动时自动加载的预配置文件，避免每次手动添加显示项 --> 
+                       
+  <!-- 4. 启动键盘控制节点：用于手动控制仿真机器人运动，配合SLAM建图 -->
+  <node pkg="wpr_simulation" type="keyboard_vel_ctrl" name="keyboard_vel_ctrl"/>
+
+</launch>

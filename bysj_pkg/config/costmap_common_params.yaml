@@ -1,0 +1,17 @@
+# 机器人形状：如果是长方形，填写四个角的坐标（单位：米）
+footprint: [[-0.2, -0.15], [-0.2, 0.15], [0.2, 0.15], [0.2, -0.15]]
+# footprint_padding: 0.05 # 给机器人外面再包一圈安全距离
+
+# robot_radius: 0.2 # 如果是圆柱形机器人用这个，注释掉上面的 footprint
+
+transform_tolerance: 0.2
+map_type: costmap
+
+obstacle_layer:
+  enabled: true
+  obstacle_range: 3.0 # 只把 3 米内的雷达数据当做障碍物
+  raytrace_range: 3.5
+  inflation_radius: 0.3 # 障碍物膨胀半径（越大越安全，但容易过不去窄门）
+  track_unknown_space: true
+  observation_sources: laser_scan_sensor
+  laser_scan_sensor: {sensor_frame: laser_frame, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
